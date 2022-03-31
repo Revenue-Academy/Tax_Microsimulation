@@ -47,13 +47,14 @@ class Policy(ParametersBase):
     
     JSON_START_YEAR = 2017  # remains the same unless earlier data added
     LAST_KNOWN_YEAR = 2017  # last year for which indexed param vals are known
-    LAST_BUDGET_YEAR = 2023  # increases by one for every new assessment year
+    LAST_BUDGET_YEAR = 2030 # increases by one for every new assessment year
     DEFAULT_NUM_YEARS = LAST_BUDGET_YEAR - JSON_START_YEAR + 1
 
-    f = open('global_vars.json')
-    vars = json.load(f)
-    print("vars in policy", vars)
-    DEFAULTS_FILENAME = vars['DEFAULTS_FILENAME']
+    # f = open('global_vars.json')
+    # vars = json.load(f)
+    # print("vars in policy", vars)
+    # DEFAULTS_FILENAME = vars['DEFAULTS_FILENAME']
+    DEFAULTS_FILENAME = 'current_law_policy_new.json'
 
     def __init__(self,DEFAULTS_FILENAME=None,
                  gfactors=None,

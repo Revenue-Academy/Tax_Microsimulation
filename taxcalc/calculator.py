@@ -22,10 +22,12 @@ from taxcalc.functions import (net_salary_income, net_rental_income,
                                tax_stcg_splrate, tax_ltcg_splrate,
                                tax_specialrates, current_year_losses,
                                brought_fwd_losses, agri_income, pit_liability)
-from taxcalc.corpfunctions import (total_other_income_cit, depreciation_PM,
-                                   corp_income_business_profession,
-                                   corp_GTI_before_set_off, GTI_and_losses,
-                                   cit_liability)
+from taxcalc.corpfuncnew import (depreciation_PM15, depreciation_PM30, depreciation_PM40,
+                                 depreciation_PM50, depreciation_PM60, depreciation_PM80,
+                                 depreciation_PM100, depreciation_PM, additions_PM, corp_income_business_profession,
+                                 corp_GTI_before_set_off, GTI_and_losses, TTI,
+                                 cit_liability, MAT_liability, MAT_liability_and_credit,
+                                 Net_tax_liability)
 from taxcalc.gstfunctions import (gst_liability_item)
 from taxcalc.policy import Policy
 from taxcalc.records import Records
@@ -106,10 +108,11 @@ class Calculator(object):
                                            tax_specialrates, current_year_losses,
                                            brought_fwd_losses, agri_income, pit_liability)
         if self.corprecords is not None:
-            from taxcalc.corpfunctions import (total_other_income_cit, depreciation_PM,
-                                               corp_income_business_profession,
-                                               corp_GTI_before_set_off, GTI_and_losses,
-                                               cit_liability)
+            from taxcalc.corpfuncnew import (depreciation_PM15, depreciation_PM30, depreciation_PM40,
+                                             depreciation_PM50, depreciation_PM60, depreciation_PM80,
+                                             depreciation_PM100, depreciation_PM, additions_PM, corp_income_business_profession,
+                                             corp_GTI_before_set_off, GTI_and_losses, TTI, cit_liability, 
+                                             MAT_liability, MAT_liability_and_credit, Net_tax_liability)
         if self.gstrecords is not None:
             from taxcalc.gstfunctions import (gst_liability_item)        
 
@@ -227,6 +230,39 @@ class Calculator(object):
         """
         Advance all embedded objects to next year.
         """
+        bf_loss1 = self.__corprecords.newloss1
+        bf_loss2 = self.__corprecords.newloss2
+        bf_loss3 = self.__corprecords.newloss3
+        bf_loss4 = self.__corprecords.newloss4
+        bf_loss5 = self.__corprecords.newloss5
+        bf_loss6 = self.__corprecords.newloss6
+        bf_loss7 = self.__corprecords.newloss7
+        bf_loss8 = self.__corprecords.newloss8
+
+        cl_wdv_pm15 = self.__corprecords.close_wdv_pm15
+        cl_wdv_pm30 = self.__corprecords.close_wdv_pm30
+        cl_wdv_pm40 = self.__corprecords.close_wdv_pm40
+        cl_wdv_pm50 = self.__corprecords.close_wdv_pm50
+        cl_wdv_pm60 = self.__corprecords.close_wdv_pm60
+        cl_wdv_pm80 = self.__corprecords.close_wdv_pm80
+        cl_wdv_pm100 = self.__corprecords.close_wdv_pm100
+        
+        bf_mat1 = self.__corprecords.NEW_MAT_CR1
+        bf_mat2 = self.__corprecords.NEW_MAT_CR2
+        bf_mat3 = self.__corprecords.NEW_MAT_CR3
+        bf_mat4 = self.__corprecords.NEW_MAT_CR4
+        bf_mat5 = self.__corprecords.NEW_MAT_CR5
+        bf_mat6 = self.__corprecords.NEW_MAT_CR6
+        bf_mat7 = self.__corprecords.NEW_MAT_CR7
+        bf_mat8 = self.__corprecords.NEW_MAT_CR8
+        bf_mat9 = self.__corprecords.NEW_MAT_CR9
+        bf_mat10 = self.__corprecords.NEW_MAT_CR10
+        bf_mat11 = self.__corprecords.NEW_MAT_CR11
+        bf_mat12 = self.__corprecords.NEW_MAT_CR12
+        bf_mat13 = self.__corprecords.NEW_MAT_CR13
+        bf_mat14 = self.__corprecords.NEW_MAT_CR14
+        bf_mat15 = self.__corprecords.NEW_MAT_CR15
+
         next_year = self.__policy.current_year + 1
         if self.records is not None:        
             self.__records.increment_year()
@@ -235,6 +271,40 @@ class Calculator(object):
         if self.corprecords is not None:            
             self.__corprecords.increment_year()
         self.__policy.set_year(next_year)
+
+        self.__corprecords.LOSS_LAG1 = bf_loss1
+        self.__corprecords.LOSS_LAG2 = bf_loss2 
+        self.__corprecords.LOSS_LAG3 = bf_loss3
+        self.__corprecords.LOSS_LAG4 = bf_loss4
+        self.__corprecords.LOSS_LAG5 = bf_loss5
+        self.__corprecords.LOSS_LAG6 = bf_loss6
+        self.__corprecords.LOSS_LAG7 = bf_loss7
+        self.__corprecords.LOSS_LAG8 = bf_loss8
+       
+        self.__corprecords.PWR_DOWN_VAL_1ST_DAY_PY_15P = cl_wdv_pm15
+        self.__corprecords.PWR_DOWN_VAL_1ST_DAY_PY_30P = cl_wdv_pm30
+        self.__corprecords.PWR_DOWN_VAL_1ST_DAY_PY_40P = cl_wdv_pm40
+        self.__corprecords.PWR_DOWN_VAL_1ST_DAY_PY_50P = cl_wdv_pm50
+        self.__corprecords.PWR_DOWN_VAL_1ST_DAY_PY_60P = cl_wdv_pm60
+        self.__corprecords.PWR_DOWN_VAL_1ST_DAY_PY_80P = cl_wdv_pm80
+        self.__corprecords.PWR_DOWN_VAL_1ST_DAY_PY_100P = cl_wdv_pm100
+                   
+        self.__corprecords.MAT_LAG1 = bf_mat1
+        self.__corprecords.MAT_LAG2 = bf_mat2
+        self.__corprecords.MAT_LAG3 = bf_mat3
+        self.__corprecords.MAT_LAG4 = bf_mat4
+        self.__corprecords.MAT_LAG5 = bf_mat5
+        self.__corprecords.MAT_LAG6 = bf_mat6
+        self.__corprecords.MAT_LAG7 = bf_mat7
+        self.__corprecords.MAT_LAG8 = bf_mat8
+        self.__corprecords.MAT_LAG9 = bf_mat9
+        self.__corprecords.MAT_LAG10 = bf_mat10
+        self.__corprecords.MAT_LAG11 = bf_mat11
+        self.__corprecords.MAT_LAG12 = bf_mat12
+        self.__corprecords.MAT_LAG13 = bf_mat13
+        self.__corprecords.MAT_LAG14 = bf_mat14
+        self.__corprecords.MAT_LAG15 = bf_mat15
+        
 
     def advance_to_year(self, year):
         """
@@ -273,21 +343,23 @@ class Calculator(object):
         # pdb.set_trace()
         # Corporate calculations
         if self.corprecords is not None:   
-            net_rental_income(self.__policy, self.__corprecords)
+            depreciation_PM15(self.__policy, self.__corprecords)
+            depreciation_PM30(self.__policy, self.__corprecords)
+            depreciation_PM40(self.__policy, self.__corprecords)
+            depreciation_PM50(self.__policy, self.__corprecords)
+            depreciation_PM60(self.__policy, self.__corprecords)
+            depreciation_PM80(self.__policy, self.__corprecords)
+            depreciation_PM100(self.__policy, self.__corprecords)
             depreciation_PM(self.__policy, self.__corprecords)
+            additions_PM(self.__policy, self.__corprecords)
             corp_income_business_profession(self.__policy, self.__corprecords)
-            total_other_income_cit(self.__policy, self.__corprecords)
-            current_year_losses(self.__policy, self.__corprecords)
-            brought_fwd_losses(self.__policy, self.__corprecords)
             corp_GTI_before_set_off(self.__policy, self.__corprecords)
             GTI_and_losses(self.__policy, self.__corprecords)
-            itemized_deductions(self.__policy, self.__corprecords)
-            deduction_10AA(self.__policy, self.__corprecords)
-            taxable_total_income(self.__policy, self.__corprecords)
-            tax_stcg_splrate(self.__policy, self.__corprecords)
-            tax_ltcg_splrate(self.__policy, self.__corprecords)
-            tax_specialrates(self.__policy, self.__corprecords)
+            TTI(self.__policy, self.__corprecords)
             cit_liability(self.__policy, self.__corprecords)
+            MAT_liability(self.__policy, self.__corprecords)
+            MAT_liability_and_credit(self.__policy, self.__corprecords)
+            Net_tax_liability(self.__policy, self.__corprecords)
         # Individual calculations
         if self.records is not None:        
             net_salary_income(self.__policy, self.__records)
@@ -513,6 +585,13 @@ class Calculator(object):
         Length of arrays in embedded Records object.
         """
         return self.__records.array_length
+
+    @property
+    def carray_len(self):
+        """
+        Length of arrays in embedded Records object.
+        """
+        return self.__corprecords.array_length
 
     def policy_param(self, param_name, param_value=None):
         """
@@ -1291,6 +1370,17 @@ class Calculator(object):
         growmodel_dict = Calculator._convert_parameter_dict(raw_dict[key])
         return (cons_dict, behv_dict, gdiff_base_dict, gdiff_resp_dict,
                 growmodel_dict)
+
+    def read_calc_variables(self):
+        self.sub_directory = 'taxcalc'
+        self.records_vars_filename = 'corprecords_variables_new.json'
+        with open(self.sub_directory+'/'+self.records_vars_filename) as f:
+            record_vars = json.load(f)
+        records_vars_list = []
+        for k, s in record_vars.items():
+            for items in s.items():
+                records_vars_list += items[:1]
+        return records_vars_list
 
     @staticmethod
     def _convert_parameter_dict(param_key_dict):

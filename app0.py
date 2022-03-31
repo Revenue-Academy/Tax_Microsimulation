@@ -27,7 +27,7 @@ assert isinstance(crecs, CorpRecords)
 assert crecs.data_year == 2017
 assert crecs.current_year == 2017
 
-policy_filename = "current_law_policy_cmie.json"
+policy_filename = "current_law_policy_new.json"
 # create Policy object containing current-law policy
 pol = Policy(DEFAULTS_FILENAME=policy_filename)
 #pol = Policy()
@@ -39,7 +39,7 @@ assert pol.current_year == 2017
 #calc1 = Calculator(policy=pol, records=recs, gstrecords=grecs,
 #                   corprecords=crecs, verbose=False)
 
-calc1 = Calculator(policy=pol, records=recs, verbose=False)
+calc1 = Calculator(policy=pol, corprecords=crecs, verbose=False)
 
 # NOTE: calc1 now contains a PRIVATE COPY of pol and a PRIVATE COPY of recs,
 #       so we can continue to use pol and recs in this script without any
@@ -50,13 +50,22 @@ assert calc1.current_year == 2017
 
 calc1.calc_all()
 
-dump_vars = ['FILING_SEQ_NO', 'AGEGRP', 'SALARIES', 'INCOME_HP',
-             'Income_BP', 'TOTAL_INCOME_OS', 'Aggregate_Income',
-             'TI_special_rates', 'tax_TI_special_rates', 'GTI', 'TTI', 'pitax']
-dumpdf = calc1.dataframe(dump_vars)
+start_year = 2017
+end_year = 2023
+wt_cit = []
+i=0
+for year in range(start_year, end_year):
+       calc1.advance_to_year(year)    
+       calc1.calc_all()
+       weighted_citax1 = calc1.weighted_total_cit('citax')
+       weighted_citax1_bn = round(weighted_citax1/10**7, 2)
+       wt_cit += [weighted_citax1_bn]
+print(wt_cit)
+dump_vars = calc1.read_calc_variables()
+# dump_vars = ['ID_NO', 'citax']
+dumpdf = calc1.dataframe_cit(dump_vars)
 column_order = dumpdf.columns
 
-assert len(dumpdf.index) == calc1.array_len
+assert len(dumpdf.index) == calc1.carray_len
 
-dumpdf.to_csv('app0-dump.csv', columns=column_order,
-              index=False, float_format='%.0f')
+#dumpdf.to_csv('taxcalc/testdump.csv', index=False)

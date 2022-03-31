@@ -81,10 +81,10 @@ class CorpRecords(object):
     CITCSV_YEAR = 2017
 
     CUR_PATH = os.path.abspath(os.path.dirname(__file__))
-    CIT_DATA_FILENAME = 'cit_cross.csv'
+    CIT_DATA_FILENAME = 'cit_cross_new.csv'
     CIT_WEIGHTS_FILENAME = 'cit_cross_wgts1.csv'
     CIT_BLOWFACTORS_FILENAME = 'cit_panel_blowup.csv'
-    VAR_INFO_FILENAME = 'corprecords_variables.json'
+    VAR_INFO_FILENAME = 'corprecords_variables_new.json'
 
     def __init__(self,
                  data=CIT_DATA_FILENAME,

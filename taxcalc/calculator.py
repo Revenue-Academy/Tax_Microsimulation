@@ -171,6 +171,7 @@ class Calculator(object):
         # For now, don't zero out for corporate
         # pdb.set_trace()
         # Corporate calculations
+        
         net_rental_income(self.__policy, self.__corprecords)
         depreciation_PM(self.__policy, self.__corprecords)
         corp_income_business_profession(self.__policy, self.__corprecords)

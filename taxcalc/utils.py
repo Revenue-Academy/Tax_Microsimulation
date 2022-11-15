@@ -244,7 +244,8 @@ def create_distribution_table(vdf, groupby, income_measure,
         pdf = add_income_table_row_variable(vdf, income_measure,
                                             STANDARD_INCOME_BINS)
     # construct grouped DataFrame
-    print(pdf)
+    #print(pdf)
+    
     gpdf = pdf.groupby('table_row', as_index=False)
     dist_table = stat_dataframe(gpdf)
     del pdf['table_row']

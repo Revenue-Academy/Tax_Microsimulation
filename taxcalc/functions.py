@@ -11,6 +11,7 @@ import numpy as np
 from taxcalc.decorators import iterate_jit
 
 
+
 @iterate_jit(nopython=True)
 def net_salary_income(SALARIES, std_deduction, Income_Salary):
     """

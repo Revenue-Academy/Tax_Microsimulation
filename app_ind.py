@@ -12,31 +12,32 @@ n = 123456789
 print("INR {}".format(curr_ind(n)))
 
 recs = Records(data='pit.csv', weights='pit_weights.csv')
+grecs = GSTRecords()
 crecs = CorpRecords()
 
 # create Policy object containing current-law policy
 pol = Policy()
 
-# specify Calculator object for current-law policy
-calc1 = Calculator(policy=pol, records=recs, corprecords=crecs, verbose=False)
+# # specify Calculator object for current-law policy
+# calc1 = Calculator(policy=pol, records=recs, gstrecords=grecs, corprecords=crecs, verbose=False)
 
-# specify Calculator object for reform in JSON file
-reform = Calculator.read_json_param_objects('Budget2019_reform.json', None)
-pol.implement_reform(reform['policy'])
-calc2 = Calculator(policy=pol, records=recs, corprecords=crecs, verbose=False)
+# # specify Calculator object for reform in JSON file
+# reform = Calculator.read_json_param_objects('Budget2019_reform.json', None)
+# pol.implement_reform(reform['policy'])
+# calc2 = Calculator(policy=pol, records=recs, gstrecords=grecs, corprecords=crecs, verbose=False)
 
-calc1.calc_all()
-calc2.calc_all()
-output_in_averages = False
-output_categories = 'standard_income_bins'
-dt1, dt2 = calc1.distribution_tables(calc2, output_categories,
-                                     averages=output_in_averages,
-                                     scaling=True)
+# calc1.calc_all()
+# calc2.calc_all()
+# output_in_averages = False
+# output_categories = 'standard_income_bins'
+# dt1, dt2 = calc1.distribution_tables(calc2, output_categories,
+#                                      averages=output_in_averages,
+#                                      scaling=True)
 
-pd.options.display.float_format = '{:,.3f}'.format
+# pd.options.display.float_format = '{:,.3f}'.format
 
 
-"""
+
 # create Records object containing pit.csv and pit_weights.csv input data
 recs = Records(data='pit.csv', weights='pit_weights.csv')
 crecs = CorpRecords()
@@ -45,12 +46,12 @@ crecs = CorpRecords()
 pol = Policy()
 
 # specify Calculator object for current-law policy
-calc1 = Calculator(policy=pol, records=recs, corprecords=crecs, verbose=False)
+calc1 = Calculator(policy=pol, records=recs, gstrecords=grecs, corprecords=crecs, verbose=False)
 
 # specify Calculator object for reform in JSON file
 reform = Calculator.read_json_param_objects('Budget2019_reform.json', None)
 pol.implement_reform(reform['policy'])
-calc2 = Calculator(policy=pol, records=recs, corprecords=crecs, verbose=False)
+calc2 = Calculator(policy=pol, records=recs, gstrecords=grecs, corprecords=crecs, verbose=False)
 # loop through years 2017, 2018, and 2019 and print out pitax
 for year in range(2017, 2020):
     calc1.advance_to_year(year)
@@ -118,4 +119,4 @@ for year in range(2017, 2020):
         dt1.to_string(dfile, columns=to_include)
     with open('dist-table-part-ref.txt', 'w') as dfile:
         dt2.to_string(dfile, columns=to_include)
-"""
+

@@ -140,8 +140,8 @@ class Calculator(object):
         """
         next_year = self.__policy.current_year + 1
         self.__records.increment_year()
-        self.__gstrecords.increment_year()
-        self.__corprecords.increment_year()
+        #self.__gstrecords.increment_year()
+        #self.__corprecords.increment_year()
         self.__policy.set_year(next_year)
 
     def advance_to_year(self, year):
@@ -165,8 +165,8 @@ class Calculator(object):
         # pylint: disable=too-many-function-args,no-value-for-parameter
         # conducts static analysis of Calculator object for current_year
         assert self.__records.current_year == self.__policy.current_year
-        assert self.__gstrecords.current_year == self.__policy.current_year
-        assert self.__corprecords.current_year == self.__policy.current_year
+        #assert self.__gstrecords.current_year == self.__policy.current_year
+        #assert self.__corprecords.current_year == self.__policy.current_year
         self.__records.zero_out_changing_calculated_vars()
         # For now, don't zero out for corporate
         # pdb.set_trace()
@@ -186,6 +186,7 @@ class Calculator(object):
         tax_ltcg_splrate(self.__policy, self.__corprecords)
         tax_specialrates(self.__policy, self.__corprecords)
         cit_liability(self.__policy, self.__corprecords)
+        
         # Individual calculations
         net_salary_income(self.__policy, self.__records)
         net_rental_income(self.__policy, self.__records)

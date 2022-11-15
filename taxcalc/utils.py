@@ -220,12 +220,13 @@ def create_distribution_table(vdf, groupby, income_measure,
         Returns calculated distribution table column statistics derived from
         the specified grouped Dataframe object, gpdf.
         """
+        
         sdf = pd.DataFrame()
         for col in DIST_TABLE_COLUMNS:
             if col == 'weight':
-                sdf[col] = gpdf.apply(unweighted_sum, col)
+                sdf[col] = gpdf.apply(unweighted_sum, col).values[:, 1]
             else:
-                sdf[col] = gpdf.apply(weighted_sum, col)
+                sdf[col] = gpdf.apply(weighted_sum, col).values[:, 1]
         return sdf
     # main logic of create_distribution_table
     assert isinstance(vdf, pd.DataFrame)
@@ -243,6 +244,7 @@ def create_distribution_table(vdf, groupby, income_measure,
         pdf = add_income_table_row_variable(vdf, income_measure,
                                             STANDARD_INCOME_BINS)
     # construct grouped DataFrame
+    print(pdf)
     gpdf = pdf.groupby('table_row', as_index=False)
     dist_table = stat_dataframe(gpdf)
     del pdf['table_row']
@@ -292,12 +294,24 @@ def create_distribution_table(vdf, groupby, income_measure,
     if scaling:
         for col in DIST_TABLE_COLUMNS:
             if col == 'weight':
-                dist_table[col] = np.round(dist_table[col] * 1e-5, 3)
+                dist_table[col] *= 1
+                dist_table.round({col: 0})
             else:
                 if averages:
-                    dist_table[col] = np.round(dist_table[col] * 1, 0)
+                    dist_table[col] *= 1
+                    dist_table.round({col: 0})
                 else:
-                    dist_table[col] = np.round(dist_table[col] * 1e-7, 3)
+                    dist_table[col] *= 1e-6
+                    dist_table[col]=dist_table[col].astype(float).round(0)
+    # if scaling:
+    #     for col in DIST_TABLE_COLUMNS:
+    #         if col == 'weight':
+    #             dist_table[col] = np.round(dist_table[col] * 1e-5, 3)
+    #         else:
+    #             if averages:
+    #                 dist_table[col] = np.round(dist_table[col] * 1, 0)
+    #             else:
+    #                 dist_table[col] = np.round(dist_table[col] * 1e-7, 3)
     # return table as Pandas DataFrame
     vdf.sort_index(inplace=True)
     return dist_table
